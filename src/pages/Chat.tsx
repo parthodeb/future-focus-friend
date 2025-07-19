@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
+import type { Database } from '@/integrations/supabase/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +16,9 @@ import {
   Brain,
   User,
   Bot,
-  Loader2
+  Loader2,
+  FileText,
+  MapPin
 } from 'lucide-react';
 
 interface Message {
@@ -58,6 +61,18 @@ const Chat = () => {
       icon: Brain,
       color: 'bg-purple-500',
       placeholder: 'Describe your assignment and I\'ll guide you through it...'
+    },
+    research_paper: {
+      title: 'Research Paper Generator',
+      icon: FileText,
+      color: 'bg-orange-500',
+      placeholder: 'Tell me what research paper you want to generate...'
+    },
+    learning_path: {
+      title: 'Learning Path Generator',
+      icon: MapPin,
+      color: 'bg-teal-500',
+      placeholder: 'What topic or skill would you like to learn?'
     }
   };
 
@@ -124,7 +139,7 @@ const Chat = () => {
         .from('chat_sessions')
         .insert({
           user_id: user.id,
-          support_type: supportType as 'tutoring' | 'general' | 'assignment',
+          support_type: supportType as Database['public']['Enums']['support_type'],
           title: title
         })
         .select()
