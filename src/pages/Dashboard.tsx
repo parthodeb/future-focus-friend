@@ -16,7 +16,9 @@ import {
   LogOut,
   Plus,
   Clock,
-  GraduationCap
+  GraduationCap,
+  FileText,
+  MapPin
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -100,6 +102,22 @@ const Dashboard = () => {
       icon: Brain,
       color: 'text-purple-500',
       bgColor: 'bg-purple-50 dark:bg-purple-950/20'
+    },
+    {
+      type: 'research_paper',
+      title: 'Research Papers',
+      description: 'Generate IEEE format research papers with AI assistance',
+      icon: FileText,
+      color: 'text-orange-500',
+      bgColor: 'bg-orange-50 dark:bg-orange-950/20'
+    },
+    {
+      type: 'learning_path',
+      title: 'Learning Paths',
+      description: 'AI-generated personalized learning roadmaps',
+      icon: MapPin,
+      color: 'text-teal-500',
+      bgColor: 'bg-teal-50 dark:bg-teal-950/20'
     }
   ];
 
@@ -156,7 +174,7 @@ const Dashboard = () => {
           </TabsList>
 
           <TabsContent value="support" className="space-y-6">
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
               {supportTypes.map((support) => {
                 const Icon = support.icon;
                 return (
