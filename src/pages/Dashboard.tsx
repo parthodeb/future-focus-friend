@@ -130,25 +130,32 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b">
+      <header className="glass-effect sticky top-0 z-50 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <GraduationCap className="h-8 w-8 text-primary mr-2" />
-              <h1 className="text-xl font-bold text-primary">StudySupport AI</h1>
+            <div className="flex items-center animate-fade-in">
+              <div className="relative">
+                <GraduationCap className="h-8 w-8 text-primary mr-3 animate-float" />
+                <div className="absolute inset-0 h-8 w-8 text-primary mr-3 animate-glow opacity-50"></div>
+              </div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+                StudySupport AI
+              </h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <Avatar>
-                <AvatarFallback>
-                  {profile?.full_name?.charAt(0) || user?.email?.charAt(0) || 'U'}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-medium hidden sm:block">
+            <div className="flex items-center space-x-4 animate-fade-in">
+              <div className="relative">
+                <Avatar className="ring-2 ring-primary/20 transition-all duration-300 hover:ring-primary/40">
+                  <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary-glow/20 text-primary font-semibold">
+                    {profile?.full_name?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+              <span className="text-sm font-medium hidden sm:block text-foreground/80">
                 {profile?.full_name || user?.email}
               </span>
-              <Button variant="ghost" size="sm" onClick={handleSignOut}>
+              <Button variant="ghost" size="sm" onClick={handleSignOut} className="hover:bg-destructive/10 hover:text-destructive transition-colors">
                 <LogOut className="h-4 w-4" />
               </Button>
             </div>
@@ -157,128 +164,162 @@ const Dashboard = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-foreground mb-2">
-            Welcome back, {profile?.full_name?.split(' ')[0] || 'Student'}!
+        <div className="mb-12 text-center animate-fade-in">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+            Welcome back, {profile?.full_name?.split(' ')[0] || 'Student'}! 🎓
           </h2>
-          <p className="text-muted-foreground">
-            Choose how you'd like to study today
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Choose how you'd like to study today and unlock your learning potential
           </p>
         </div>
 
-        <Tabs defaultValue="support" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="support">AI Support</TabsTrigger>
-            <TabsTrigger value="history">Recent Sessions</TabsTrigger>
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="support" className="space-y-8">
+          <div className="flex justify-center animate-scale-in">
+            <TabsList className="glass-effect p-1 rounded-xl shadow-lg">
+              <TabsTrigger value="support" className="rounded-lg font-medium transition-all duration-300 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                🤖 AI Support
+              </TabsTrigger>
+              <TabsTrigger value="history" className="rounded-lg font-medium transition-all duration-300 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                📚 Recent Sessions
+              </TabsTrigger>
+              <TabsTrigger value="profile" className="rounded-lg font-medium transition-all duration-300 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                👤 Profile
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-          <TabsContent value="support" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-              {supportTypes.map((support) => {
+          <TabsContent value="support" className="space-y-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {supportTypes.map((support, index) => {
                 const Icon = support.icon;
+                const animationClass = `animate-stagger-${Math.min(index + 1, 5)}`;
                 return (
-                  <Card key={support.type} className="hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardHeader className={`${support.bgColor} rounded-t-lg`}>
-                      <div className="flex items-center space-x-2">
-                        <Icon className={`h-6 w-6 ${support.color}`} />
-                        <CardTitle className="text-lg">{support.title}</CardTitle>
+                  <div key={support.type} className={`feature-card group cursor-pointer ${animationClass}`}>
+                    <div className="relative overflow-hidden">
+                      <div className={`h-24 ${support.bgColor} flex items-center justify-center relative`}>
+                        <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/5"></div>
+                        <Icon className={`h-12 w-12 ${support.color} relative z-10 transition-transform duration-300 group-hover:scale-110`} />
                       </div>
-                    </CardHeader>
-                    <CardContent className="pt-6">
-                      <CardDescription className="mb-4">
-                        {support.description}
-                      </CardDescription>
-                      <Button 
-                        onClick={() => startNewChat(support.type)}
-                        className="w-full"
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Start New Session
-                      </Button>
-                    </CardContent>
-                  </Card>
+                      <div className="p-6">
+                        <CardTitle className="text-xl mb-3 group-hover:text-primary transition-colors">
+                          {support.title}
+                        </CardTitle>
+                        <CardDescription className="mb-6 text-sm leading-relaxed">
+                          {support.description}
+                        </CardDescription>
+                        <Button 
+                          onClick={() => startNewChat(support.type)}
+                          className="w-full btn-gradient group-hover:shadow-xl transition-all duration-300"
+                          size="lg"
+                        >
+                          <Plus className="h-4 w-4 mr-2" />
+                          Start New Session
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 );
               })}
             </div>
           </TabsContent>
 
-          <TabsContent value="history" className="space-y-4">
-            <Card>
+          <TabsContent value="history" className="space-y-6 animate-fade-in">
+            <div className="card-enhanced">
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <History className="h-5 w-5 mr-2" />
+                <CardTitle className="flex items-center text-2xl">
+                  <History className="h-6 w-6 mr-3 text-primary" />
                   Recent Sessions
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {recentSessions.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">
-                    No recent sessions. Start a new chat to begin!
-                  </p>
+                  <div className="text-center py-12">
+                    <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-muted/50 flex items-center justify-center">
+                      <History className="h-12 w-12 text-muted-foreground" />
+                    </div>
+                    <p className="text-muted-foreground text-lg mb-2">No recent sessions yet</p>
+                    <p className="text-sm text-muted-foreground">Start a new chat to begin your learning journey!</p>
+                  </div>
                 ) : (
-                  <div className="space-y-3">
-                    {recentSessions.map((session) => (
-                      <div key={session.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                        <div>
-                          <h4 className="font-medium">{session.title}</h4>
-                          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                            <Badge variant="outline">{session.support_type}</Badge>
-                            {session.subject && <span>• {session.subject}</span>}
-                            <Clock className="h-3 w-3 ml-2" />
-                            <span>{new Date(session.created_at).toLocaleDateString()}</span>
+                  <div className="space-y-4">
+                    {recentSessions.map((session, index) => (
+                      <div key={session.id} className={`glass-effect p-4 rounded-xl transition-all duration-300 hover:shadow-lg animate-slide-up`} style={{ animationDelay: `${index * 0.1}s` }}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-lg mb-2">{session.title}</h4>
+                            <div className="flex items-center space-x-3 text-sm text-muted-foreground">
+                              <Badge variant="secondary" className="rounded-full px-3 py-1">
+                                {session.support_type.replace('_', ' ')}
+                              </Badge>
+                              {session.subject && <span>• {session.subject}</span>}
+                              <div className="flex items-center ml-auto">
+                                <Clock className="h-3 w-3 mr-1" />
+                                <span>{new Date(session.created_at).toLocaleDateString()}</span>
+                              </div>
+                            </div>
                           </div>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => navigate(`/chat/${session.support_type}?session=${session.id}`)}
+                            className="btn-gradient ml-4"
+                          >
+                            Continue
+                          </Button>
                         </div>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => navigate(`/chat/${session.support_type}?session=${session.id}`)}
-                        >
-                          Continue
-                        </Button>
                       </div>
                     ))}
                   </div>
                 )}
               </CardContent>
-            </Card>
+            </div>
           </TabsContent>
 
-          <TabsContent value="profile">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <User className="h-5 w-5 mr-2" />
+          <TabsContent value="profile" className="animate-fade-in">
+            <div className="card-enhanced max-w-2xl mx-auto">
+              <CardHeader className="text-center pb-6">
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/20 to-primary-glow/20 flex items-center justify-center">
+                  <User className="h-10 w-10 text-primary" />
+                </div>
+                <CardTitle className="flex items-center justify-center text-2xl">
                   Profile Settings
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium">Full Name</label>
-                    <p className="text-sm text-muted-foreground">
-                      {profile?.full_name || 'Not provided'}
-                    </p>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-primary">Full Name</label>
+                    <div className="glass-effect p-3 rounded-lg">
+                      <p className="text-foreground">
+                        {profile?.full_name || 'Not provided'}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <label className="text-sm font-medium">Email</label>
-                    <p className="text-sm text-muted-foreground">{user?.email}</p>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-primary">Email</label>
+                    <div className="glass-effect p-3 rounded-lg">
+                      <p className="text-foreground">{user?.email}</p>
+                    </div>
                   </div>
-                  <div>
-                    <label className="text-sm font-medium">Grade Level</label>
-                    <p className="text-sm text-muted-foreground">
-                      {profile?.grade_level || 'Not specified'}
-                    </p>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-primary">Grade Level</label>
+                    <div className="glass-effect p-3 rounded-lg">
+                      <p className="text-foreground">
+                        {profile?.grade_level || 'Not specified'}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <label className="text-sm font-medium">Subjects of Interest</label>
-                    <p className="text-sm text-muted-foreground">
-                      {profile?.subjects_of_interest?.join(', ') || 'None specified'}
-                    </p>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-primary">Subjects of Interest</label>
+                    <div className="glass-effect p-3 rounded-lg">
+                      <p className="text-foreground">
+                        {profile?.subjects_of_interest?.join(', ') || 'None specified'}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
-            </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
